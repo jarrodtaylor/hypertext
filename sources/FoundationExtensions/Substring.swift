@@ -1,0 +1,1 @@
+extension Substring { var toString: String { String(self) } }

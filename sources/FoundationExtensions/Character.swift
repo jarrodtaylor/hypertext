@@ -1,0 +1,1 @@
+extension Character { var toString: String { String(self) } }
