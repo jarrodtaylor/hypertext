@@ -6,7 +6,7 @@
     },
     "run" : {
       "enabled" : true,
-      "script" : "swift run"
+      "script" : "swift run hypertext Fixtures docs"
     }
   },
   "openLogOnRun" : "start"

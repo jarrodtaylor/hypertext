@@ -15,6 +15,25 @@ struct HyperText: ParsableCommand {
   var stream = false
 
   mutating func run() throws {
-    print("hi")
+    Project.source = URL(string: source, relativeTo: URL.currentDirectory())
+    Project.target = URL(string: target, relativeTo: URL.currentDirectory())
+    
+    guard Project.source!.masked != Project.target!.masked else {
+      throw ValidationError("Source and target cannot be the same directory.")
+    }
+    
+    guard !Project.target!.masked.contains(Project.source!.masked) else {
+      throw ValidationError("Source directory cannot contain target directory.")
+    }
+    
+    guard !Project.source!.masked.contains(Project.target!.masked) else {
+      throw ValidationError("Target directory cannot contain source directory.")
+    }
+    
+    guard Project.source!.exists else {
+      throw ValidationError("Source directory does not exist.")
+    }
+    
+    stream ? Project.stream() : Project.build()
   }
 }
