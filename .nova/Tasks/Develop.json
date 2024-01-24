@@ -3,7 +3,11 @@
     "build" : {
       "enabled" : true,
       "script" : "swift build"
+    },
+    "run" : {
+      "enabled" : true,
+      "script" : "swift run"
     }
   },
-  "openLogOnRun" : "fail"
+  "openLogOnRun" : "start"
 }
