@@ -5,6 +5,11 @@ import Foundation
 struct HyperText: ParsableCommand {
   static var configuration = CommandConfiguration(commandName: "hypertext")
   
+  static func echo(_ message: String) -> Void {
+    var standardError: FileHandle = FileHandle.standardError
+    print(message, to: &standardError)
+  }
+  
   @Argument(help: "Relative path to source directory.")
   var source: String
   

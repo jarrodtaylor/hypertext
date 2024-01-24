@@ -12,18 +12,18 @@ struct Project {
       }
       
       for url in diff {
-        print("Deleting \(url.masked)")
+        HyperText.echo("Deleting \(url.masked)")
         try FileManager.default.removeItem(at: url)
       }
       
       for url in target!.folders {
         if try FileManager.default.contentsOfDirectory(atPath: url.path()).isEmpty {
-          print("Deleting \(url.masked)")
+          HyperText.echo("Deleting \(url.masked)")
           try FileManager.default.removeItem(at: url)
         }
       }
     } catch {
-      print(error.localizedDescription)
+      HyperText.echo(error.localizedDescription)
       exit(1)
     }
   }
@@ -35,7 +35,11 @@ struct Project {
   }
   
   static func stream() -> Void {
-    print("Streaming...")
+    HyperText.echo("Streaming \(source!.masked) -> \(target!.masked) (^c to stop)")
+    build()
+    let stream: Stream = source!.stream { _events in build() }
+    withExtendedLifetime(stream, {})
+    RunLoop.main.run()
   }
 }
 

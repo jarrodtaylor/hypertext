@@ -28,6 +28,6 @@ struct File {
   }
 
   func build() throws {
-    print("Building \(ref)")
+    HyperText.echo("Building \(ref)")
   }
 }
