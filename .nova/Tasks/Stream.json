@@ -1,0 +1,17 @@
+{
+  "actions" : {
+    "build" : {
+      "enabled" : true,
+      "script" : "swift build"
+    },
+    "clean" : {
+      "enabled" : true,
+      "script" : "rm -rf docs"
+    },
+    "run" : {
+      "enabled" : true,
+      "script" : "swift run hypertext Fixtures docs --stream"
+    }
+  },
+  "openLogOnRun" : "start"
+}

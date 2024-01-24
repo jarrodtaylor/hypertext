@@ -34,7 +34,9 @@ struct Project {
       .first(where: { $0.ref == ref })
   }
   
-  static func stream() -> Void {}
+  static func stream() -> Void {
+    print("Streaming...")
+  }
 }
 
 fileprivate extension Project {
