@@ -28,6 +28,17 @@ struct File {
   }
 
   func build() throws {
-    HyperText.echo("Building \(ref)")
+    guard source.isRenderable else {
+      HyperText.echo("Copying \(source.masked) -> \(target.masked)")
+      try FileManager.default.copyFile(self)
+      return
+    }
+    
+    HyperText.echo("Rendering \(source.masked) -> \(target.masked)")
+    render() // try FileManager.default.renderFile(self)
+  }
+  
+  func render() {
+    
   }
 }

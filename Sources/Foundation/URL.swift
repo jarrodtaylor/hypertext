@@ -12,6 +12,11 @@ extension URL {
   
   var isDirectory: Bool { (try? resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true }
   
+  var isRenderable: Bool {
+    ["css", "htm", "html", "js", "md", "rss", "svg"]
+    .contains(self.pathExtension)
+  }
+  
   var list: [URL] {
     FileManager.default
       .subpaths(atPath: self.path())!
