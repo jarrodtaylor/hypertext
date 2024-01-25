@@ -53,7 +53,7 @@ fileprivate extension Stream {
     let pathsBase: UnsafeMutablePointer = paths.assumingMemoryBound(to: UnsafePointer<CChar>.self)
     let pathsBuffer: UnsafeBufferPointer  = UnsafeBufferPointer(start: pathsBase, count: count)
     let flagsBuffer: UnsafeBufferPointer  = UnsafeBufferPointer(start: flags, count: count)
-
+    
     let events = (0..<count)
       .map { i -> FileSystemEvent in
         FileSystemEvent(url: URL(bufferPath: pathsBuffer[i]), flag: flagsBuffer[i])
