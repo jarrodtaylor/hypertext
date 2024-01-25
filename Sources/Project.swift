@@ -22,7 +22,9 @@ struct Project {
           try FileManager.default.removeItem(at: url)
         }
       }
-    } catch {
+    }
+    
+    catch {
       HyperText.echo(error.localizedDescription)
       exit(1)
     }
@@ -37,8 +39,7 @@ struct Project {
   static func stream() -> Void {
     HyperText.echo("Streaming \(source!.masked) -> \(target!.masked) (^c to stop)")
     build()
-    let stream: Stream = source!.stream { _events in build() }
-    withExtendedLifetime(stream, {})
+    withExtendedLifetime(source!.stream { _events in build() }, {})
     RunLoop.main.run()
   }
 }
