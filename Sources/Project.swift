@@ -55,3 +55,16 @@ fileprivate extension Project {
     .filter { $0.lastPathComponent.prefix(1) != "!" }
     .map { File(source: $0) }
 }
+
+extension URL {
+  var files: [URL] { list.filter { !$0.isDirectory } }
+  
+  var folders: [URL] { list.filter { $0.isDirectory } }
+  
+  var list: [URL] {
+    FileManager.default
+      .subpaths(atPath: self.path())!
+      .filter { !$0.contains(".DS_Store") }
+      .map { self.appending(component: $0) }
+  }
+}
