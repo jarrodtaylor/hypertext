@@ -27,18 +27,27 @@ struct File {
     : url  
   }
 
-  func build() throws {
-    guard source.isRenderable else {
+  func build() throws -> Void {
+    if target.exists { try FileManager.default.removeItem(at: target) }
+    
+    try FileManager.default.createDirectory(
+      atPath: target.deletingLastPathComponent().path(),
+      withIntermediateDirectories: true)
+    
+    if source.isRenderable {
       HyperText.echo("Copying \(source.masked) -> \(target.masked)")
-      try FileManager.default.copyFile(self)
-      return
+      try FileManager.default.copyItem(at: source, to: target)
     }
     
-    HyperText.echo("Rendering \(source.masked) -> \(target.masked)")
-    render() // try FileManager.default.renderFile(self)
+    else {
+      HyperText.echo("Rendering \(source.masked) -> \(target.masked)")
+      FileManager.default.createFile(
+        atPath: target.path(),
+        contents: try render().data(using: .utf8))
+    }
   }
   
-  func render() {
-    
+  func render() throws -> String {
+    ""
   }
 }
