@@ -1,6 +1,8 @@
 import Foundation
 
 extension URL {
+  var contents: String { get throws { String(decoding: try Data(contentsOf: self), as: UTF8.self) }}
+  
   var exists: Bool {
     var isDirectory: ObjCBool = true
     return FileManager.default.fileExists(atPath: self.path(), isDirectory: &isDirectory)
