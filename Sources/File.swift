@@ -34,7 +34,7 @@ struct File {
       atPath: target.deletingLastPathComponent().path(),
       withIntermediateDirectories: true)
     
-    if source.isRenderable {
+    if isRenderable {
       HyperText.echo("Rendering \(source.masked) -> \(target.masked)")
       FileManager.default.createFile(
         atPath: target.path(),
@@ -65,30 +65,28 @@ fileprivate extension File {
     get throws { MarkdownParser.shared.parse(try source.contents).metadata }
   }
   
+  var isRenderable: Bool {
+    ["css", "htm", "html", "js", "md", "rss", "svg"].contains(source.pathExtension)
+  }
+  
   func render(_ cxt: [String: String] = [:]) throws -> String {
     var cxt = cxt
     for (key, val) in try context { cxt[key] = val }
     
-    let text = try contents
+    var text = try contents
+    
+    // layout
+    
+    // includes
+    
+    for match in text.find(Variable.pattern) {
+      let include = Variable(fragment: match)
+      if let value = cxt.contains(where: { $0.key == include.key })
+      ? cxt[include.key] : include.defaultValue {
+        text = text.replacingFirstOccurrence(of: match, with: value as String)
+      }      
+    }
     
     return text
-  }
-}
-
-extension MarkdownParser { static let shared: MarkdownParser = MarkdownParser() }
-
-extension String {
-  func find(_ pattern: String) -> [String] {
-    try! NSRegularExpression(pattern: pattern)
-      .matches(in: self, range: NSRange(location: 0, length: self.utf16.count))
-      .map { (self as NSString).substring(with: $0.range) }
-  }
-}
-
-extension URL {
-  var contents: String { get throws { String(decoding: try Data(contentsOf: self), as: UTF8.self) }}
-  
-  var isRenderable: Bool {
-    ["css", "htm", "html", "js", "md", "rss", "svg"].contains(self.pathExtension)
   }
 }

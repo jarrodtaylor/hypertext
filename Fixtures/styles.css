@@ -1,0 +1,18 @@
+---
+@bgColor: red
+---
+body {
+  background-color: blue;
+}
+
+<!-- @foo -->
+
+<!-- @bar ?? foo bar baz -->
+
+/* @foo */
+
+/* @bar ?? foo bar baz */
+
+// @foo
+
+// @foo ?? foo bar baz
