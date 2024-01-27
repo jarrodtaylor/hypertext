@@ -7,7 +7,7 @@ class Stream {
   fileprivate let callback: (_ events: [FileSystemEvent]) -> Void
   fileprivate var stream: FSEventStreamRef? = nil
   fileprivate var started: Bool = false
-
+  
   init(_ url: URL, callback: @escaping (_ events: [FileSystemEvent]) -> Void) {
     self.url = url
     self.callback = callback
@@ -62,15 +62,5 @@ fileprivate extension Stream {
       .filter { "\($0.flag)" != "4259840" } // Ignore events created by this process (I think).
     
     if !events.isEmpty { callback(events) }
-  }
-}
-
-extension URL {
-  init(bufferPath: UnsafePointer<Int8>) {
-    self = URL(fileURLWithFileSystemRepresentation: bufferPath, isDirectory: false, relativeTo: nil)
-  }
-
-  func stream(_ callback: @escaping ([Stream.FileSystemEvent]) -> Void) -> Stream {
-    Stream(self, callback: callback)
   }
 }

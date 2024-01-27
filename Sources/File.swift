@@ -3,13 +3,7 @@ import Ink
 
 struct File {
   let source: URL
-  
-  var isModified: Bool {
-    get throws {
-      true
-    }
-  }
-
+    
   var ref: String {
     source.absoluteString
       .replacingFirstOccurrence(of: Project.source!.absoluteString, with: "")
@@ -26,15 +20,17 @@ struct File {
     ? url.deletingPathExtension().appendingPathExtension("html")
     : url  
   }
-
+  
   func build() throws -> Void {
+    guard try isModified else { return }
+    
     if target.exists { try FileManager.default.removeItem(at: target) }
     
     try FileManager.default.createDirectory(
       atPath: target.deletingLastPathComponent().path(),
       withIntermediateDirectories: true)
     
-    if isRenderable {
+    if source.isRenderable {
       HyperText.echo("Rendering \(source.masked) -> \(target.masked)")
       FileManager.default.createFile(
         atPath: target.path(),
@@ -48,32 +44,18 @@ struct File {
   }
 }
 
-fileprivate extension File {
-  var contents: String {
+fileprivate extension File {  
+  var isModified: Bool {
     get throws {
-      if source.pathExtension == "md" { MarkdownParser.shared.html(from: try source.contents) }
-      else if try context.isEmpty { try source.contents }
-      else {
-        try source.contents.replacingFirstOccurrence(
-          of: try source.contents.find(#"---(\n|.)*?---\n"#).first!,
-          with: "")
-      }
+      true
     }
-  }
-  
-  var context: [String: String] {
-    get throws { MarkdownParser.shared.parse(try source.contents).metadata }
-  }
-  
-  var isRenderable: Bool {
-    ["css", "htm", "html", "js", "md", "rss", "svg"].contains(source.pathExtension)
   }
   
   func render(_ cxt: [String: String] = [:]) throws -> String {
     var cxt = cxt
-    for (key, val) in try context { cxt[key] = val }
+    for (key, val) in try source.context { cxt[key] = val }
     
-    var text = try contents
+    var text = try source.contents
     
     // layout
     

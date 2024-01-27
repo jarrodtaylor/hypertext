@@ -4,12 +4,7 @@ import Foundation
 @main
 struct HyperText: ParsableCommand {
   static var configuration = CommandConfiguration(commandName: "hypertext")
-  
-  static func echo(_ message: String) -> Void {
-    var standardError: FileHandle = FileHandle.standardError
-    print(message, to: &standardError)
-  }
-  
+    
   @Argument(help: "Relative path to source directory.")
   var source: String
   
@@ -18,7 +13,7 @@ struct HyperText: ParsableCommand {
   
   @Flag(help: "Stream changes from source to target.")
   var stream = false
-
+  
   mutating func run() throws {
     Project.source = URL(string: source, relativeTo: URL.currentDirectory())
     Project.target = URL(string: target, relativeTo: URL.currentDirectory())
@@ -43,6 +38,9 @@ struct HyperText: ParsableCommand {
   }
 }
 
-extension FileHandle: TextOutputStream {
-  public func write(_ message: String) -> Void { self.write(message.data(using: .utf8)!) }
+extension HyperText {
+  static func echo(_ message: String) -> Void {
+    var standardError: FileHandle = FileHandle.standardError
+    print(message, to: &standardError)
+  }
 }

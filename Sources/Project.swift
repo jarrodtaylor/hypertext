@@ -6,10 +6,7 @@ struct Project {
   
   static func build() -> Void {
     do {
-      for file in manifest {
-        guard try file.isModified else { continue }
-        try file.build()
-      }
+      try manifest.forEach { try $0.build() }
       
       for url in diff {
         HyperText.echo("Deleting \(url.masked)")
@@ -30,12 +27,6 @@ struct Project {
     }
   }
   
-  static func file(_ ref: String) -> File? {
-    source!.files
-      .map { File(source: $0) }
-      .first(where: { $0.ref == ref })
-  }
-  
   static func stream() -> Void {
     HyperText.echo("Streaming \(source!.masked) -> \(target!.masked) (^c to stop)")
     build()
@@ -54,17 +45,10 @@ fileprivate extension Project {
   static let manifest: [File] = source!.files
     .filter { $0.lastPathComponent.prefix(1) != "!" }
     .map { File(source: $0) }
-}
-
-extension URL {
-  var files: [URL] { list.filter { !$0.isDirectory } }
   
-  var folders: [URL] { list.filter { $0.isDirectory } }
-  
-  var list: [URL] {
-    FileManager.default
-      .subpaths(atPath: self.path())!
-      .filter { !$0.contains(".DS_Store") }
-      .map { self.appending(component: $0) }
+  static func file(_ ref: String) -> File? {
+    source!.files
+      .map { File(source: $0) }
+      .first(where: { $0.ref == ref })
   }
 }
