@@ -45,9 +45,40 @@ struct File {
 }
 
 fileprivate extension File {
+  var dependencies: [File] {
+    get throws {
+      guard source.isRenderable else { return [] }
+      
+      var deps: [File?] = []
+      
+      for match in try source.contents.find(Include.pattern) {
+        deps.append(Include(fragment: match).file)
+      }
+      
+      if let ref = try source.context["#layout"] { deps.append(Project.file(ref)) }
+      
+      return deps
+        .filter { $0!.source.exists == true }
+        .map { $0! }
+    }
+  }
+  
   var isModified: Bool {
     get throws {
-      true
+      guard target.exists,
+        let sourceModDate = try source.modificationDate,
+        let targetModDate = try target.modificationDate,
+        targetModDate > sourceModDate
+      else { return true }
+      
+      for dep in try dependencies {
+        if let depModDate = try dep.source.modificationDate,
+          depModDate > targetModDate,
+          try dep.isModified
+        { return true }
+      }
+      
+      return false
     }
   }
   

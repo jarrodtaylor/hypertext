@@ -47,6 +47,13 @@ extension URL {
       .asRef
   }
   
+  var modificationDate: Date? {
+    get throws {
+      try FileManager.default
+        .attributesOfItem(atPath: self.path())[FileAttributeKey.modificationDate] as? Date
+    }
+  }
+  
   var rawContents: String {
     get throws { String(decoding: try Data(contentsOf: self), as: UTF8.self) }
   }
