@@ -1,3 +1,3 @@
 # Post Two
 
-lorem ipsum
+<!-- @foo -->
