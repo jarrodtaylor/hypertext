@@ -50,5 +50,5 @@ fileprivate extension Project {
   
   static let manifest: [File] = source!.files
     .filter { $0.lastPathComponent.prefix(1) != "!" }
-    .map { File(source: $0) }  
+    .map { File(source: $0) }
 }

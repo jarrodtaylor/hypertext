@@ -1,7 +1,7 @@
 import Foundation
 import Ink
 
-extension URL {  
+extension URL {
   var contents: String {
     get throws {
       if pathExtension == "md" { MarkdownParser.shared.html(from: try rawContents) }
@@ -32,7 +32,7 @@ extension URL {
   var isRenderable: Bool {
     ["css", "htm", "html", "js", "md", "rss", "svg"].contains(pathExtension)
   }
-
+  
   var list: [URL] {
     FileManager.default
       .subpaths(atPath: self.path())!

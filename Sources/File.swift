@@ -3,7 +3,7 @@ import Ink
 
 struct File {
   let source: URL
-    
+  
   var ref: String {
     source.absoluteString
       .replacingFirstOccurrence(of: Project.source!.absoluteString, with: "")
@@ -18,7 +18,7 @@ struct File {
     
     return url.pathExtension == "md"
     ? url.deletingPathExtension().appendingPathExtension("html")
-    : url  
+    : url
   }
   
   func build() throws -> Void {
@@ -44,7 +44,7 @@ struct File {
   }
 }
 
-fileprivate extension File {  
+fileprivate extension File {
   var isModified: Bool {
     get throws {
       true
@@ -57,13 +57,20 @@ fileprivate extension File {
     
     var text = try source.contents
     
-    // layout
+    if cxt["#forceLayout"] == "true" || cxt["#isIncluding"] != "true",
+      let layoutRef = cxt["#layout"], let layoutFile = Project.file(layoutRef)
+    {
+      let macro = Layout(template: layoutFile, content: text)
+      for (key, value) in try macro.context { if cxt[key] == nil { cxt[key] = value }}
+      text = try macro.render()
+    }
     
     for match in text.find(Include.pattern) {
       let macro = Include(fragment: match)
       if macro.file?.source.exists == true {
         var params = macro.parameters
         for (key, value) in params { if let val = cxt[value] { params[key] = val } }
+        params["#isIncluding"] = "true"
         text = text.replacingFirstOccurrence(of: match, with: try macro.file!.render(params))
       }
     }
@@ -73,7 +80,7 @@ fileprivate extension File {
       if let value = cxt.contains(where: { $0.key == macro.key })
       ? cxt[macro.key] : macro.defaultValue {
         text = text.replacingFirstOccurrence(of: match, with: value as String)
-      }      
+      }
     }
     
     return text
