@@ -17,3 +17,4 @@ TODO
 - [ ] Prettify output code on render (https://github.com/simonbs/Prettier)
 - [ ] Set up stdout for devops pipelines
 - [ ] Handle file system errors when streaming
+- [ ] Build HyperText into a Nova extension
