@@ -25,7 +25,6 @@ struct File {
     guard try isModified else { return }
     
     if target.exists { try FileManager.default.removeItem(at: target) }
-    
     try FileManager.default.createDirectory(
       atPath: target.deletingLastPathComponent().path(),
       withIntermediateDirectories: true)
@@ -44,25 +43,7 @@ struct File {
   }
 }
 
-fileprivate extension File {
-  var dependencies: [File] {
-    get throws {
-      guard source.isRenderable else { return [] }
-      
-      var deps: [File?] = []
-      
-      for match in try source.contents.find(Include.pattern) {
-        deps.append(Include(fragment: match).file)
-      }
-      
-      if let ref = try source.context["#layout"] { deps.append(Project.file(ref)) }
-      
-      return deps
-        .filter { $0!.source.exists == true }
-        .map { $0! }
-    }
-  }
-  
+fileprivate extension File {  
   var isModified: Bool {
     get throws {
       guard target.exists,
@@ -71,7 +52,7 @@ fileprivate extension File {
         targetModDate > sourceModDate
       else { return true }
       
-      for dep in try dependencies {
+      for dep in try source.dependencies {
         if let depModDate = try dep.source.modificationDate,
           depModDate > targetModDate,
           try dep.isModified

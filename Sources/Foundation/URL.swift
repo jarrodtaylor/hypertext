@@ -17,7 +17,21 @@ extension URL {
   var context: [String: String] {
     get throws { MarkdownParser.shared.parse(try rawContents).metadata }
   }
-
+  
+  var dependencies: [File] {
+    get throws {
+      guard isRenderable else { return [] }
+      
+      var deps: [File?] = []
+      for match in try contents.find(Include.pattern) { deps.append(Include(fragment: match).file) }
+      if let ref = try context["#layout"] { deps.append(Project.file(ref)) }
+      
+      return deps
+        .filter { $0!.source.exists == true }
+        .map { $0! }
+    }
+  }
+  
   var exists: Bool {
     var isDirectory: ObjCBool = true
     return FileManager.default.fileExists(atPath: self.path(), isDirectory: &isDirectory)
