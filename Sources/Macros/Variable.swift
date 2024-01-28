@@ -15,7 +15,7 @@ struct Variable {
   }
   
   var defaultValue: String? {
-    let split = fragment.split(separator: "??")
+    let split = fragment.split(separator: "??", maxSplits: 1)
     guard split.count > 1 else { return nil }
     var value = split.last!.description
     if value.suffix(2) == "*/"  { value = value.dropLast(2).description }

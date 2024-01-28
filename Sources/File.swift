@@ -59,12 +59,20 @@ fileprivate extension File {
     
     // layout
     
-    // includes
+    // Should params be merged with current context?
+    for match in text.find(Include.pattern) {
+      let macro = Include(fragment: match)
+      if macro.file?.source.exists == true {
+        text = text.replacingFirstOccurrence(
+          of: match,
+          with: try macro.file!.render(macro.parameters))
+      }
+    }
     
     for match in text.find(Variable.pattern) {
-      let include = Variable(fragment: match)
-      if let value = cxt.contains(where: { $0.key == include.key })
-      ? cxt[include.key] : include.defaultValue {
+      let macro = Variable(fragment: match)
+      if let value = cxt.contains(where: { $0.key == macro.key })
+      ? cxt[macro.key] : macro.defaultValue {
         text = text.replacingFirstOccurrence(of: match, with: value as String)
       }      
     }

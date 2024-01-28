@@ -27,6 +27,12 @@ struct Project {
     }
   }
   
+  static func file(_ ref: String) -> File? {
+    source!.files
+      .map { File(source: $0) }
+      .first(where: { $0.ref == ref })
+  }
+  
   static func stream() -> Void {
     HyperText.echo("Streaming \(source!.masked) -> \(target!.masked) (^c to stop)")
     build()
@@ -44,11 +50,5 @@ fileprivate extension Project {
   
   static let manifest: [File] = source!.files
     .filter { $0.lastPathComponent.prefix(1) != "!" }
-    .map { File(source: $0) }
-  
-  static func file(_ ref: String) -> File? {
-    source!.files
-      .map { File(source: $0) }
-      .first(where: { $0.ref == ref })
-  }
+    .map { File(source: $0) }  
 }
