@@ -185,7 +185,7 @@ And `src/posts/!one.md` and `src/posts/!two.md`:
 This is the first post.
 ```
 
-```html
+```md
 ## Post Two
 
 This is the second post.
@@ -286,9 +286,9 @@ To create `target/about.html`:
 </html>
 ```
 
-> By default, a file being included with the `#include` macro will not use a layout even is one is
-> defined in its metadata. To force a nested layout, add `#forceLayout: true` to the included file's
-> metadata or pass it in as part of the `#include` syntax.
+By default, a file being included with the `#include` macro will not use a layout even if one is
+defined in its metadata. To force a nested layout, add `#forceLayout: true` to the included file's
+metadata or pass it in as part of the `#include` syntax.
 
 [hypertext.sh]: https://hypertext.sh
 [releases]: https://github.com/jarrodtaylor/hypertext/releases
