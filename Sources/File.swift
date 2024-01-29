@@ -73,7 +73,7 @@ fileprivate extension File {
       let layoutRef = cxt["#layout"], let layoutFile = Project.file(layoutRef)
     {
       let macro = Layout(template: layoutFile, content: text)
-      for (key, value) in try macro.context { if cxt[key] == nil { cxt[key] = value }}
+      for (key, value) in try macro.context { if cxt[key] == nil { cxt[key] = value } }
       text = try macro.render()
     }
     
