@@ -2,8 +2,8 @@ HyperText
 =========
 HyperText is a CLI for building simple, static sites.
 
-Using an up-to-date version of macOS, download the latest executable from the
-[releases page][releases] and add it to your path.
+Using an up-to-date version of macOS, [download the latest executable][executable]
+and add it to your path.
 
 > You might be able to build and run HyperText on Linux. I haven't tried it yet.
 
@@ -50,3 +50,4 @@ Rendered Files
 
 [hypertext.sh]: https://hypertext.sh
 [releases]: https://github.com/jarrodtaylor/hypertext/releases
+[executable]: https://github.com/jarrodtaylor/hypertext/releases/download/v0.0.0/hypertext
