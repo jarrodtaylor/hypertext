@@ -3,16 +3,10 @@ import Foundation
 class Stream {
   struct FileSystemEvent { let url: URL, flag: FSEventStreamEventFlags }
   
-  fileprivate let url: URL
-  fileprivate let callback: (_ events: [FileSystemEvent]) -> Void
   fileprivate var stream: FSEventStreamRef? = nil
   fileprivate var started: Bool = false
   
-  init(_ url: URL, callback: @escaping (_ events: [FileSystemEvent]) -> Void) {
-    self.url = url
-    self.callback = callback
-    self.started = self.start()
-  }
+  init() { self.started = self.start() }
 }
 
 fileprivate extension Stream {
@@ -30,7 +24,7 @@ fileprivate extension Stream {
           .handleEvents(count: count, paths: paths, flags: flags)
       },
       &context,
-      [self.url.path() as NSString] as NSArray,
+      [Project.source!.path() as NSString] as NSArray,
       UInt64(kFSEventStreamEventIdSinceNow),
       1.0,
       FSEventStreamCreateFlags(kFSEventStreamCreateFlagFileEvents)
@@ -61,6 +55,6 @@ fileprivate extension Stream {
       .filter { $0.url.lastPathComponent != ".DS_Store" }
       .filter { "\($0.flag)" != "4259840" } // Ignore events created by this process (I think).
     
-    if !events.isEmpty { callback(events) }
+    if !events.isEmpty { Project.build() }
   }
 }

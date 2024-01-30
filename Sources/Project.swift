@@ -6,9 +6,9 @@ struct Project {
   
   static func build() -> Void {
     do {
-      try manifest.forEach { try $0.build() }
+      try manifest().forEach { try $0.build() }
       
-      for url in diff {
+      for url in diff() {
         HyperText.echo("Deleting \(url.masked)")
         try FileManager.default.removeItem(at: url)
       }
@@ -22,8 +22,12 @@ struct Project {
     }
     
     catch {
-      HyperText.echo(error.localizedDescription)
-      exit(1)
+      guard error.localizedDescription.contains("no such file")
+        || error.localizedDescription.contains("doesn’t exist")
+      else {
+        HyperText.echo(error.localizedDescription)
+        exit(1)
+      }
     }
   }
   
@@ -36,19 +40,24 @@ struct Project {
   static func stream() -> Void {
     HyperText.echo("Streaming \(source!.masked) -> \(target!.masked) (^c to stop)")
     build()
-    withExtendedLifetime(source!.stream { _events in build() }, {})
+    withExtendedLifetime(Stream(), {})
     RunLoop.main.run()
   }
 }
 
 fileprivate extension Project {
-  static let diff: [URL] = target!.list
-    .filter {
-      !manifest
-        .map { $0.target.absoluteString }
-        .contains($0.absoluteString) }
+  static func diff() -> [URL] {
+    target!.list
+      .filter {
+        !manifest()
+          .map { $0.target.absoluteString }
+          .contains($0.absoluteString) 
+      }
+  }
   
-  static let manifest: [File] = source!.files
-    .filter { $0.lastPathComponent.prefix(1) != "!" }
-    .map { File(source: $0) }
+  static func manifest() -> [File] {
+    source!.files
+      .filter { $0.lastPathComponent.prefix(1) != "!" }
+      .map { File(source: $0) }
+  }
 }

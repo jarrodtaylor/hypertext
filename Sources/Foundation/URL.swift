@@ -74,9 +74,5 @@ extension URL {
   
   init(bufferPath: UnsafePointer<Int8>) {
     self = URL(fileURLWithFileSystemRepresentation: bufferPath, isDirectory: false, relativeTo: nil)
-  }
-  
-  func stream(_ callback: @escaping ([Stream.FileSystemEvent]) -> Void) -> Stream {
-    Stream(self, callback: callback)
-  }
+  }  
 }

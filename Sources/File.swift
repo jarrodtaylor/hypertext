@@ -39,6 +39,10 @@ struct File {
     else {
       HyperText.echo("Copying \(source.masked) -> \(target.masked)")
       try FileManager.default.copyItem(at: source, to: target)
+      var targetMod = target
+      var resourceValues = URLResourceValues()
+      resourceValues.contentModificationDate = Date()
+      try targetMod.setResourceValues(resourceValues)
     }
   }
 }
