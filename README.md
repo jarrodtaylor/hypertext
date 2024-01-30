@@ -6,7 +6,7 @@ and expand dynamic content with variables, all while ending up with a static sit
 a server app to run or a frontend library to render.
 
 Using an up-to-date version of macOS, [download the latest executable][executable]
-(v0.0.0) and add it to your path.
+(v0.0.1) and add it to your path.
 
 > You might be able to build and run HyperText on Linux. I haven't tried it yet.
 
@@ -294,4 +294,4 @@ metadata or pass it in as part of the `#include` syntax.
 
 [hypertext.sh]: https://hypertext.sh
 [releases]: https://github.com/jarrodtaylor/hypertext/releases
-[executable]: https://github.com/jarrodtaylor/hypertext/releases/download/v0.0.0/hypertext
+[executable]: https://github.com/jarrodtaylor/hypertext/releases/download/v0.0.1/hypertext

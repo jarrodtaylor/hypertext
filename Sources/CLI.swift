@@ -5,7 +5,7 @@ import Foundation
 struct HyperText: ParsableCommand {
   static var configuration = CommandConfiguration(
     commandName: "hypertext",
-    version: "0.0.0")
+    version: "0.0.1")
     
   @Argument(help: "Relative path to source directory.")
   var source: String
