@@ -239,8 +239,10 @@ To create a `target/blog.html` that looks like this:
 </html>
 ```
 
-> Values passed in from an including file take precedence over values defined in the metadata of
-> the included file.
+Values passed in from an including file take precedence over values defined in the metadata of the
+included file.
+
+> Variables can be passed as values of include params.
 
 #### Layouts
 
