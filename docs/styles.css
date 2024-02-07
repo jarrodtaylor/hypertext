@@ -2,14 +2,6 @@ body {
   background-color: blue;
 }
 
-<!-- @foo -->
-
-foo bar baz
-
-/* @foo */
-
-foo bar baz
-
-// @foo
-
-foo bar baz
+body {
+  color: red;
+}

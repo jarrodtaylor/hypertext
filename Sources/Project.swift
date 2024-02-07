@@ -14,6 +14,7 @@ struct Project {
       }
       
       for url in target!.folders {
+        // FIXME: Can this be a filter on .folders?
         if try FileManager.default.contentsOfDirectory(atPath: url.path()).isEmpty {
           HyperText.echo("Deleting \(url.masked)")
           try FileManager.default.removeItem(at: url)
@@ -47,7 +48,7 @@ struct Project {
 
 fileprivate extension Project {
   static func diff() -> [URL] {
-    target!.list
+    target!.files
       .filter {
         !manifest()
           .map { $0.target.absoluteString }

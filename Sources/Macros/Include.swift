@@ -1,7 +1,7 @@
 import Foundation
 
 struct Include {
-  static let pattern = #"(<!-- #include (.*?) -->|/* #include (.*?) */|// #include (.*?).+)"#
+  static let pattern = #"(<!-- #include (.*?) -->|\/\* #include (.*?) \*/|// #include (.*?).+)"#
   
   var fragment: String
   
